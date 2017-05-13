@@ -27,4 +27,4 @@ Deletes older versions (numbered sequences) of the specified file.
 ```
 purge.sh [-k n] file
 ```
-
+n is the number of versions to keep.
