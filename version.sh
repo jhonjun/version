@@ -28,8 +28,12 @@ then
 fi
 numext=$((ext))
 
-next=`printf "%03d" $((numext + 1))`
-newfile="${fname}.${next}"
-
-cp "${fname}" "${newfile}"
+prev=`printf "%03d" $((numext))`
+/usr/bin/cmp "${fname}" "${fname}.${prev}" > /dev/null
+if [[ ${?} != 0 ]]
+then
+  next=`printf "%03d" $((numext + 1))`
+  newfile="${fname}.${next}"
+  cp "${fname}" "${newfile}"
+fi
 
