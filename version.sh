@@ -11,25 +11,25 @@
 #
 # @usage     version.sh file
 #
-#set -x
+set -x
 
 srcfile=${1}
 fname="${srcfile%.*}"
-origname="${fname}"
 
 echo "${srcfile}" | grep "\." > /dev/null
 [[ ${?} == 0 ]] && ext="${srcfile##*.}" || ext=""
 
 numext=$((ext))
 [[ ${ext} && ${numext} == 0 ]] && fname="${fname}.${ext}"
+origname="${fname}"
 
 newfile=`\ls -r "${fname}".* 2> /dev/null | head -n1`
 if [[ ${newfile} ]]
 then
   ext="${newfile##*.}"
   origname="${newfile%.*}"
+  numext=$((ext))
 fi
-numext=$((ext))
 
 prev=`printf "%03d" $((numext))`
 /usr/bin/cmp "${fname}" "${fname}.${prev}" 2> /dev/null
