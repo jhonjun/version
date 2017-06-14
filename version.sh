@@ -11,29 +11,32 @@
 #
 # @usage     version.sh file
 #
-#set -x
+set -x
 
 srcfile=${1}
 fname="${srcfile%.*}"
+origname="${fname}"
 
 echo "${srcfile}" | grep "\." > /dev/null
 [[ ${?} == 0 ]] && ext="${srcfile##*.}" || ext=""
 
-newfile=`ls -r "${fname}".* 2> /dev/null | head -n1`
+numext=$((ext))
+[[ ${ext} && ${numext} == 0 ]] && fname="${fname}.${ext}"
+
+newfile=`\ls -r "${fname}".* 2> /dev/null | head -n1`
 if [[ ${newfile} ]]
 then
-  numext=$((ext))
-  [[ ${ext} && ${numext} == 0 ]] && fname="${fname}.${ext}"
   ext="${newfile##*.}"
+  origname="${newfile%.*}"
 fi
 numext=$((ext))
 
 prev=`printf "%03d" $((numext))`
-/usr/bin/cmp "${fname}" "${fname}.${prev}" > /dev/null
+/usr/bin/cmp "${fname}" "${fname}.${prev}" 2> /dev/null
 if [[ ${?} != 0 ]]
 then
   next=`printf "%03d" $((numext + 1))`
-  newfile="${fname}.${next}"
-  cp "${fname}" "${newfile}"
+  newfile="${origname}.${next}"
+  cp "${origname}" "${newfile}"
 fi
 
