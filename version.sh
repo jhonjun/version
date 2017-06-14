@@ -11,7 +11,7 @@
 #
 # @usage     version.sh file
 #
-set -x
+#set -x
 
 srcfile=${1}
 fname="${srcfile%.*}"
